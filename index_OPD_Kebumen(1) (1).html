@@ -1,0 +1,2372 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>GARASI - Gerbang Administrasi Kendaraan Dinas</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+            -webkit-font-smoothing: antialiased;
+        }
+
+        html, body {
+            width: 100%;
+            height: 100%;
+            overflow-x: hidden;
+        }
+
+        /* 1. HALAMAN PENCARIAN (HOME / PUBLIC SEARCH) */
+        #searchPage {
+            display: flex;
+            flex-direction: column;
+            min-height: 100vh;
+            background-color: #cfd8dc;
+        }
+
+        .navbar {
+            height: 85px;
+            background-color: #b0bec5;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 10px 24px;
+        }
+
+        .navbar-left {
+            display: flex;
+            align-items: center;
+            gap: 16px;
+        }
+
+        .logo-img {
+            height: 65px;
+            width: auto;
+            object-fit: contain;
+        }
+
+        .title-text {
+            color: #ffffff;
+            font-size: 17px;
+            font-weight: 700;
+            letter-spacing: 0.5px;
+            text-shadow: 0 1px 2px rgba(0,0,0,0.15);
+        }
+
+        .user-icon {
+            width: 40px;
+            height: 40px;
+            background-color: #ffffff;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            cursor: pointer;
+            transition: transform 0.2s;
+        }
+
+        .user-icon:hover {
+            transform: scale(1.05);
+        }
+
+        .user-icon svg {
+            width: 24px;
+            height: 24px;
+            fill: none;
+            stroke: #1565c0;
+            stroke-width: 2;
+        }
+
+        main {
+            flex: 1;
+            display: flex;
+            flex-direction: column;
+        }
+
+        .hero {
+            position: relative;
+            background-image: url('img/background.jpg'); 
+            background-size: cover;
+            background-position: center 30%;
+            padding: 40px 20px 45px 20px;
+            text-align: center;
+            color: #ffffff;
+        }
+
+        .hero::before {
+            content: '';
+            position: absolute;
+            top: 0; left: 0; right: 0; bottom: 0;
+            background-color: rgba(15, 89, 153, 0.82); 
+            z-index: 1;
+        }
+
+        .hero-content {
+            position: relative;
+            z-index: 2;
+            max-width: 760px;
+            margin: 0 auto;
+        }
+
+        .hero-content h1 {
+            font-size: 28px;
+            font-weight: 700;
+            margin-bottom: 6px;
+        }
+
+        .hero-content h2 {
+            font-size: 22px;
+            font-weight: 700;
+            margin-bottom: 18px;
+        }
+
+        .hero-content p {
+            font-size: 13.5px;
+            line-height: 1.45;
+            margin-bottom: 25px;
+            opacity: 0.95;
+            font-weight: 400;
+        }
+
+        .search-container {
+            background-color: #ffffff;
+            border-radius: 6px;
+            max-width: 650px;
+            margin: 0 auto;
+            display: flex;
+            align-items: center;
+            padding: 4px 6px 4px 14px;
+            box-shadow: 0 2px 8px rgba(0, 0, 0, 0.15);
+        }
+
+        .search-icon {
+            display: flex;
+            align-items: center;
+            margin-right: 10px;
+        }
+
+        .search-icon svg {
+            width: 18px;
+            height: 18px;
+            fill: none;
+            stroke: #666;
+            stroke-width: 2;
+        }
+
+        .search-container input {
+            flex: 1;
+            border: none;
+            outline: none;
+            font-size: 14px;
+            color: #333;
+        }
+
+        .search-container input::placeholder {
+            color: #a0a0a0;
+        }
+
+        .search-btn {
+            background-color: #537791;
+            color: #ffffff;
+            border: none;
+            border-radius: 5px;
+            padding: 7px 18px;
+            font-size: 13px;
+            font-weight: 600;
+            display: flex;
+            align-items: center;
+            gap: 6px;
+            cursor: pointer;
+        }
+
+        .search-btn svg {
+            width: 14px;
+            height: 14px;
+            fill: none;
+            stroke: #fff;
+            stroke-width: 2.2;
+        }
+
+        .bottom-section {
+            flex: 1;
+            position: relative;
+            background-image: url('img/background.jpg');
+            background-size: cover;
+            background-position: center bottom;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            padding: 40px 20px;
+            text-align: center;
+        }
+
+        .bottom-section::before {
+            content: '';
+            position: absolute;
+            top: 0; left: 0; right: 0; bottom: 0;
+            background-color: rgba(225, 230, 235, 0.88); 
+            z-index: 1;
+        }
+
+        .bottom-text {
+            position: relative;
+            z-index: 2;
+            color: #2b2b2b;
+            font-size: 14px;
+            font-weight: 700;
+            line-height: 1.5;
+            max-width: 600px;
+        }
+
+        .result-section {
+            display: none;
+            flex: 1;
+            background-color: #e3f2fd;
+            padding: 20px;
+        }
+
+        .result-header-row {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            margin-bottom: 15px;
+            padding-left: 5px;
+        }
+
+        .result-icon-badge {
+            width: 36px;
+            height: 36px;
+            background-color: #ffffff;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            box-shadow: 0 1px 3px rgba(0,0,0,0.1);
+        }
+
+        .result-icon-badge svg {
+            width: 20px;
+            height: 20px;
+            stroke: #333;
+            fill: none;
+            stroke-width: 2;
+        }
+
+        .result-title-text {
+            font-size: 16px;
+            font-weight: 700;
+            color: #222;
+        }
+
+        .alert-box {
+            background-color: #fde8e8;
+            border: 1px solid #f8b4b4;
+            border-radius: 8px;
+            padding: 16px 20px;
+            display: flex;
+            align-items: flex-start;
+            gap: 14px;
+            max-width: 900px;
+            margin: 0 auto 20px auto;
+        }
+
+        .alert-icon {
+            background-color: #e02424;
+            color: white;
+            width: 28px;
+            height: 28px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: bold;
+            font-size: 16px;
+            flex-shrink: 0;
+        }
+
+        .alert-content h4 {
+            color: #9b1c1c;
+            font-size: 14.5px;
+            font-weight: 700;
+            margin-bottom: 4px;
+        }
+
+        .alert-content p {
+            color: #9b1c1c;
+            font-size: 13px;
+        }
+
+        .card-not-found {
+            background: #ffffff;
+            border-radius: 8px;
+            padding: 40px 20px;
+            max-width: 900px;
+            margin: 0 auto 30px auto;
+            text-align: center;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.08);
+        }
+
+        .not-found-icon-container {
+            position: relative;
+            width: 60px;
+            height: 60px;
+            margin: 0 auto 15px auto;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .not-found-icon-container svg {
+            width: 45px;
+            height: 45px;
+            stroke: #333;
+            fill: none;
+            stroke-width: 1.8;
+        }
+
+        .not-found-icon-container .cross-mark {
+            position: absolute;
+            bottom: 0;
+            right: 0;
+            color: #e02424;
+            font-weight: 900;
+            font-size: 20px;
+            background: #fff;
+            border-radius: 50%;
+            padding: 0 4px;
+        }
+
+        .card-not-found h3 {
+            color: #222;
+            font-size: 16px;
+            font-weight: 700;
+            margin-bottom: 8px;
+        }
+
+        .card-not-found p {
+            color: #666;
+            font-size: 13px;
+            max-width: 450px;
+            margin: 0 auto;
+            line-height: 1.4;
+        }
+
+        .card-detail {
+            display: none;
+            background: #ffffff;
+            border-radius: 8px;
+            padding: 24px 30px;
+            max-width: 900px;
+            margin: 0 auto 30px auto;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.08);
+        }
+
+        .card-detail h3 {
+            color: #1565c0;
+            font-size: 18px;
+            font-weight: 700;
+            margin-bottom: 15px;
+        }
+
+        .detail-table {
+            width: 100%;
+            border-collapse: collapse;
+        }
+
+        .detail-table tr {
+            border-bottom: 1px solid #e0e0e0;
+        }
+
+        .detail-table td {
+            padding: 12px 8px;
+            font-size: 14px;
+        }
+
+        .detail-table td.label {
+            font-weight: 700;
+            color: #444;
+            width: 30%;
+        }
+
+        .detail-table td.value {
+            color: #333;
+            text-align: right;
+        }
+
+        .status-badge {
+            background-color: #4caf50;
+            color: white;
+            padding: 4px 16px;
+            border-radius: 12px;
+            font-size: 12px;
+            font-weight: 600;
+            display: inline-block;
+        }
+
+        /* 2. HALAMAN LOGIN (LOGIN PAGE) */
+        #loginPage {
+            display: none;
+            width: 100vw;
+            height: 100vh;
+            background-color: #ffffff;
+        }
+
+        .left-section {
+            flex: 1;
+            position: relative;
+            background: linear-gradient(135deg, #0d62ab 0%, #1178c9 100%);
+            color: #ffffff;
+            display: flex;
+            flex-direction: column;
+            justify-content: space-between;
+            padding: 30px 40px;
+            overflow: hidden;
+        }
+
+        .left-section::before {
+            content: '';
+            position: absolute;
+            top: 0; left: 0; right: 0; bottom: 0;
+            background: url('img/background.jpg') center/cover no-repeat;
+            opacity: 0.15;
+            z-index: 1;
+        }
+
+        .left-content {
+            position: relative;
+            z-index: 2;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            text-align: center;
+        }
+
+        .header-logo {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            width: 100%;
+            justify-content: flex-start;
+            margin-bottom: 40px;
+        }
+
+        .header-logo img {
+            height: 45px;
+            width: auto;
+        }
+
+        .header-logo span {
+            font-size: 14px;
+            font-weight: 700;
+            letter-spacing: 0.5px;
+        }
+
+        .welcome-title {
+            font-size: 13px;
+            font-weight: 600;
+            letter-spacing: 1px;
+            margin-bottom: 8px;
+            opacity: 0.9;
+        }
+
+        .app-title {
+            font-size: 20px;
+            font-weight: 800;
+            margin-bottom: 2px;
+        }
+
+        .app-subtitle {
+            font-size: 11px;
+            font-weight: 700;
+            letter-spacing: 0.5px;
+            margin-bottom: 20px;
+            opacity: 0.9;
+        }
+
+        .badge-kabupaten {
+            background-color: #ffcc00;
+            color: #000000;
+            font-weight: 800;
+            font-size: 13px;
+            padding: 6px 24px;
+            border-radius: 20px;
+            display: inline-block;
+            margin-bottom: 25px;
+            box-shadow: 0 2px 6px rgba(0,0,0,0.2);
+            position: relative;
+        }
+
+        .badge-kabupaten::before, .badge-kabupaten::after {
+            content: '';
+            position: absolute;
+            top: 50%;
+            width: 40px;
+            height: 2px;
+            background-color: #ffcc00;
+        }
+
+        .badge-kabupaten::before { left: -50px; }
+        .badge-kabupaten::after { right: -50px; }
+
+        .desc-text {
+            font-size: 12px;
+            line-height: 1.5;
+            max-width: 80%;
+            opacity: 0.9;
+        }
+
+        .vehicles-img-container {
+            position: relative;
+            z-index: 2;
+            width: 100%;
+            display: flex;
+            justify-content: center;
+            align-items: flex-end;
+            margin-top: 10px;
+        }
+
+        .vehicles-img-container img {
+            max-width: 90%;
+            height: auto;
+            object-fit: contain;
+        }
+
+        .right-section {
+            flex: 1;
+            background-color: #ffffff;
+            display: flex;
+            flex-direction: column;
+            padding: 30px 60px;
+            justify-content: center;
+        }
+
+        .top-search {
+            background-color: #eaeaea;
+            border-radius: 8px;
+            padding: 10px 16px;
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            margin-bottom: 40px;
+            cursor: pointer;
+        }
+
+        .top-search svg {
+            width: 18px;
+            height: 18px;
+            stroke: #777;
+            stroke-width: 2;
+            fill: none;
+        }
+
+        .top-search input {
+            border: none;
+            background: transparent;
+            outline: none;
+            width: 100%;
+            font-size: 14px;
+            color: #333;
+            cursor: pointer;
+        }
+
+        .login-header {
+            margin-bottom: 35px;
+        }
+
+        .login-header h2 {
+            font-size: 16px;
+            font-weight: 800;
+            color: #222;
+            letter-spacing: 0.5px;
+        }
+
+        .login-header h3 {
+            font-size: 18px;
+            font-weight: 800;
+            color: #111;
+            margin-bottom: 12px;
+        }
+
+        .login-header p {
+            font-size: 12.5px;
+            color: #666;
+            line-height: 1.45;
+            max-width: 85%;
+        }
+
+        .form-group {
+            margin-bottom: 20px;
+        }
+
+        .form-label {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            font-size: 14px;
+            font-weight: 600;
+            color: #333;
+            margin-bottom: 8px;
+        }
+
+        .form-label svg {
+            width: 18px;
+            height: 18px;
+            stroke: #333;
+            stroke-width: 2;
+            fill: none;
+        }
+
+        .input-box {
+            position: relative;
+            width: 100%;
+        }
+
+        .input-box input {
+            width: 100%;
+            background-color: #f0f0f0;
+            border: 1px solid transparent;
+            border-radius: 8px;
+            padding: 12px 40px 12px 40px;
+            font-size: 13.5px;
+            color: #333;
+            outline: none;
+            transition: all 0.2s;
+        }
+
+        .input-box input:focus {
+            background-color: #ffffff;
+            border-color: #1a73e8;
+        }
+
+        .input-box .input-icon-left {
+            position: absolute;
+            left: 12px;
+            top: 50%;
+            transform: translateY(-50%);
+            width: 18px;
+            height: 18px;
+            stroke: #888;
+            stroke-width: 2;
+            fill: none;
+        }
+
+        .input-box .input-icon-right {
+            position: absolute;
+            right: 12px;
+            top: 50%;
+            transform: translateY(-50%);
+            width: 18px;
+            height: 18px;
+            stroke: #888;
+            stroke-width: 2;
+            fill: none;
+            cursor: pointer;
+        }
+
+        .forgot-pass {
+            text-align: right;
+            margin-bottom: 25px;
+        }
+
+        .forgot-pass a {
+            font-size: 12.5px;
+            font-weight: 700;
+            color: #222;
+            text-decoration: none;
+        }
+
+        .forgot-pass a:hover {
+            text-decoration: underline;
+        }
+
+        .btn-login {
+            width: 100%;
+            background-color: #1a73e8;
+            color: #ffffff;
+            border: none;
+            border-radius: 8px;
+            padding: 12px;
+            font-size: 15px;
+            font-weight: 700;
+            cursor: pointer;
+            transition: background-color 0.2s;
+            box-shadow: 0 4px 10px rgba(26, 115, 232, 0.3);
+        }
+
+        .btn-login:hover {
+            background-color: #1557b0;
+        }
+
+        /* 3. HALAMAN DASHBOARD ADMIN */
+        #adminDashboardPage {
+            display: none;
+            width: 100vw;
+            height: 100vh;
+            background-color: #f4f6f9;
+            overflow: hidden;
+        }
+
+        .admin-layout {
+            display: flex;
+            width: 100%;
+            height: 100%;
+        }
+
+        .admin-sidebar {
+            width: 260px;
+            background: linear-gradient(180deg, #0d62ab 0%, #1178c9 100%);
+            color: #ffffff;
+            display: flex;
+            flex-direction: column;
+            justify-content: space-between;
+            padding: 20px 0;
+            box-shadow: 2px 0 5px rgba(0,0,0,0.05);
+            position: relative;
+            overflow-y: auto;
+            flex-shrink: 0;
+        }
+
+        .sidebar-top {
+            display: flex;
+            flex-direction: column;
+            z-index: 2;
+        }
+
+        .sidebar-brand {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            padding: 0 20px 20px 20px;
+            border-bottom: 1px solid rgba(255,255,255,0.15);
+        }
+
+        .sidebar-brand img {
+            height: 38px;
+            width: auto;
+        }
+
+        .sidebar-brand-text {
+            font-size: 11px;
+            font-weight: 700;
+            line-height: 1.2;
+        }
+
+        .sidebar-subtitle-app {
+            font-size: 9px;
+            font-weight: 600;
+            padding: 12px 20px 8px 20px;
+            letter-spacing: 0.5px;
+            color: rgba(255,255,255,0.8);
+        }
+
+        .sidebar-menu {
+            list-style: none;
+            display: flex;
+            flex-direction: column;
+            gap: 4px;
+        }
+
+        .sidebar-menu li a {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            padding: 12px 20px;
+            color: rgba(255,255,255,0.85);
+            text-decoration: none;
+            font-size: 12.5px;
+            font-weight: 600;
+            transition: background 0.2s;
+            cursor: pointer;
+        }
+
+        .sidebar-menu li.active > a, .sidebar-menu li a:hover {
+            background-color: rgba(0,0,0,0.2);
+            color: #ffffff;
+            border-left: 4px solid #ffcc00;
+        }
+
+        .sidebar-menu li a svg {
+            width: 16px;
+            height: 16px;
+            fill: none;
+            stroke: currentColor;
+            stroke-width: 2;
+        }
+
+        .submenu-list {
+            list-style: none;
+            background-color: rgba(0,0,0,0.15);
+            display: none;
+            flex-direction: column;
+        }
+
+        .submenu-list li a {
+            padding: 10px 20px 10px 48px;
+            font-size: 11.5px;
+            color: rgba(255,255,255,0.75);
+            border-left: none !important;
+        }
+
+        .submenu-list li.active a, .submenu-list li a:hover {
+            color: #ffcc00;
+            background-color: rgba(0,0,0,0.1);
+        }
+
+        .sidebar-bg-art {
+            position: absolute;
+            bottom: 60px;
+            left: 0;
+            right: 0;
+            text-align: center;
+            opacity: 0.25;
+            z-index: 1;
+            pointer-events: none;
+        }
+
+        .sidebar-bg-art img {
+            max-width: 80%;
+            height: auto;
+            object-fit: contain;
+        }
+
+        .sidebar-logout-container {
+            padding: 0 20px;
+            z-index: 2;
+            margin-top: 20px;
+        }
+
+        .btn-logout {
+            width: 100%;
+            background-color: #ffffff;
+            color: #222;
+            border: none;
+            border-radius: 6px;
+            padding: 10px;
+            font-size: 13px;
+            font-weight: 700;
+            cursor: pointer;
+            box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+            transition: background 0.2s;
+        }
+
+        .btn-logout:hover {
+            background-color: #eaeaea;
+        }
+
+        .admin-main-content {
+            flex: 1;
+            display: flex;
+            flex-direction: column;
+            overflow-y: auto;
+        }
+
+        .admin-topbar {
+            height: 70px;
+            background-color: #ffffff;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 0 30px;
+            border-bottom: 1px solid #e0e0e0;
+        }
+
+        .topbar-left {
+            display: flex;
+            align-items: center;
+            gap: 15px;
+        }
+
+        .hamburger-icon {
+            cursor: pointer;
+            display: flex;
+            flex-direction: column;
+            gap: 4px;
+        }
+
+        .hamburger-icon span {
+            display: block;
+            width: 20px;
+            height: 2px;
+            background-color: #333;
+        }
+
+        .topbar-right {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+        }
+
+        .admin-profile-text {
+            text-align: right;
+        }
+
+        .admin-name {
+            font-size: 13px;
+            font-weight: 700;
+            color: #222;
+        }
+
+        .admin-dept {
+            font-size: 11px;
+            color: #666;
+        }
+
+        .admin-avatar {
+            width: 36px;
+            height: 36px;
+            background-color: #1565c0;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: white;
+        }
+
+        .admin-avatar svg {
+            width: 20px;
+            height: 20px;
+            fill: none;
+            stroke: #fff;
+            stroke-width: 2;
+        }
+
+        .dashboard-body {
+            padding: 30px;
+        }
+
+        .dashboard-title-area h1 {
+            font-size: 20px;
+            font-weight: 800;
+            color: #222;
+            margin-bottom: 4px;
+        }
+
+        .dashboard-title-area p {
+            font-size: 12.5px;
+            color: #666;
+            margin-bottom: 25px;
+        }
+
+        .stat-card-box {
+            background: #ffffff;
+            border-radius: 8px;
+            padding: 20px 25px;
+            max-width: 380px;
+            box-shadow: 0 1px 3px rgba(0,0,0,0.08);
+            margin-bottom: 25px;
+        }
+
+        .stat-card-title {
+            font-size: 11px;
+            font-weight: 700;
+            color: #777;
+            letter-spacing: 0.5px;
+            margin-bottom: 8px;
+        }
+
+        .stat-card-content {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .stat-number {
+            font-size: 22px;
+            font-weight: 800;
+            color: #222;
+        }
+
+        .stat-icon svg {
+            width: 32px;
+            height: 32px;
+            fill: none;
+            stroke: #222;
+            stroke-width: 2;
+        }
+
+        .charts-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 25px;
+        }
+
+        .chart-card {
+            background: #ffffff;
+            border-radius: 8px;
+            padding: 25px;
+            box-shadow: 0 1px 3px rgba(0,0,0,0.08);
+        }
+
+        .chart-card h3 {
+            font-size: 14px;
+            font-weight: 700;
+            color: #222;
+            margin-bottom: 4px;
+        }
+
+        .chart-card p {
+            font-size: 11.5px;
+            color: #666;
+            margin-bottom: 20px;
+        }
+
+        .pie-placeholder {
+            width: 100%;
+            height: 220px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            position: relative;
+        }
+
+        .fake-pie-1 {
+            width: 160px;
+            height: 160px;
+            border-radius: 50%;
+            background: conic-gradient(
+                #5c6bc0 0deg 130deg,
+                #26a69a 130deg 250deg,
+                #ef5350 250deg 360deg
+            );
+        }
+
+        .fake-pie-2 {
+            width: 160px;
+            height: 160px;
+            border-radius: 50%;
+            background: conic-gradient(
+                #5c6bc0 0deg 110deg,
+                #26a69a 110deg 270deg,
+                #ef5350 270deg 360deg
+            );
+        }
+
+        .chart-legends {
+            display: flex;
+            justify-content: center;
+            gap: 15px;
+            margin-top: 15px;
+            flex-wrap: wrap;
+        }
+
+        .legend-item {
+            display: flex;
+            align-items: center;
+            gap: 5px;
+            font-size: 11px;
+            color: #555;
+            font-weight: 600;
+        }
+
+        .legend-dot {
+            width: 8px;
+            height: 8px;
+            border-radius: 50%;
+        }
+
+        .content-section {
+            display: none;
+        }
+
+        .content-section.active {
+            display: block;
+        }
+
+        .data-card {
+            background: #ffffff;
+            border-radius: 8px;
+            padding: 24px 30px;
+            box-shadow: 0 1px 3px rgba(0,0,0,0.08);
+        }
+
+        .data-card-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 20px;
+            flex-wrap: wrap;
+            gap: 15px;
+        }
+
+        .data-card-title {
+            font-size: 18px;
+            font-weight: 800;
+            color: #222;
+        }
+
+        .data-card-actions {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+        }
+
+        .table-search-input {
+            border: 1px solid #d1d5db;
+            border-radius: 6px;
+            padding: 8px 14px;
+            font-size: 13px;
+            outline: none;
+            width: 250px;
+            color: #333;
+        }
+
+        .table-search-input:focus {
+            border-color: #1a73e8;
+        }
+
+        .btn-input-baru {
+            background-color: #537791;
+            color: #ffffff;
+            border: none;
+            border-radius: 6px;
+            padding: 8px 16px;
+            font-size: 13px;
+            font-weight: 600;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            gap: 6px;
+            transition: background 0.2s;
+        }
+
+        .btn-input-baru:hover {
+            background-color: #436278;
+        }
+
+        .custom-table {
+            width: 100%;
+            border-collapse: collapse;
+            text-align: left;
+        }
+
+        .custom-table th {
+            background-color: #e5e7eb;
+            color: #374151;
+            font-size: 12.5px;
+            font-weight: 700;
+            padding: 12px 16px;
+            border-bottom: 1px solid #d1d5db;
+        }
+
+        .custom-table td {
+            padding: 14px 16px;
+            font-size: 13px;
+            color: #333;
+            border-bottom: 1px solid #e5e7eb;
+        }
+
+        .table-actions {
+            display: flex;
+            gap: 10px;
+        }
+
+        .table-actions svg {
+            width: 16px;
+            height: 16px;
+            cursor: pointer;
+            stroke: #555;
+            fill: none;
+            stroke-width: 2;
+        }
+
+        .table-actions svg:hover {
+            stroke: #1a73e8;
+        }
+
+        .placeholder-box-generic {
+            background: #ffffff;
+            border-radius: 8px;
+            padding: 40px;
+            text-align: center;
+            box-shadow: 0 1px 3px rgba(0,0,0,0.08);
+            color: #555;
+            font-size: 15px;
+            font-weight: 600;
+        }
+
+        /* MODAL / POPUP IMPORT EXCEL */
+        .modal-overlay {
+            display: none;
+            position: fixed;
+            top: 0; left: 0; width: 100vw; height: 100vh;
+            background-color: rgba(0, 0, 0, 0.5);
+            z-index: 999;
+            align-items: center;
+            justify-content: center;
+            padding: 20px;
+        }
+
+        .modal-container {
+            background-color: #ffffff;
+            border-radius: 10px;
+            width: 100%;
+            max-width: 520px;
+            box-shadow: 0 6px 20px rgba(0,0,0,0.2);
+            overflow: hidden;
+            animation: modalFadeIn 0.25s ease;
+        }
+
+        @keyframes modalFadeIn {
+            from { transform: translateY(-20px); opacity: 0; }
+            to { transform: translateY(0); opacity: 1; }
+        }
+
+        .modal-header {
+            background: linear-gradient(135deg, #0d62ab 0%, #1178c9 100%);
+            color: #ffffff;
+            padding: 18px 24px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .modal-header h3 {
+            font-size: 15px;
+            font-weight: 700;
+            letter-spacing: 0.3px;
+        }
+
+        .modal-close {
+            background: transparent;
+            border: none;
+            color: #ffffff;
+            font-size: 20px;
+            font-weight: bold;
+            cursor: pointer;
+        }
+
+        .modal-body {
+            padding: 24px;
+        }
+
+        .modal-body p {
+            font-size: 13px;
+            color: #555;
+            margin-bottom: 20px;
+            line-height: 1.5;
+        }
+
+        .file-drop-area {
+            border: 2px dashed #cbd5e1;
+            border-radius: 8px;
+            padding: 30px 20px;
+            text-align: center;
+            background-color: #f8fafc;
+            cursor: pointer;
+            margin-bottom: 20px;
+            transition: border-color 0.2s;
+        }
+
+        .file-drop-area:hover {
+            border-color: #1a73e8;
+        }
+
+        .file-drop-area svg {
+            width: 36px;
+            height: 36px;
+            stroke: #64748b;
+            fill: none;
+            stroke-width: 1.8;
+            margin-bottom: 8px;
+        }
+
+        .file-drop-area .file-label-text {
+            font-size: 13px;
+            color: #334155;
+            font-weight: 600;
+            margin-bottom: 4px;
+        }
+
+        .file-drop-area .file-sub-text {
+            font-size: 11.5px;
+            color: #94a3b8;
+        }
+
+        .file-input-hidden {
+            display: none;
+        }
+
+        .modal-footer {
+            padding: 16px 24px;
+            background-color: #f1f5f9;
+            display: flex;
+            justify-content: flex-end;
+            gap: 12px;
+            border-top: 1px solid #e2e8f0;
+        }
+
+        .btn-modal-cancel {
+            background-color: #e2e8f0;
+            color: #334155;
+            border: none;
+            border-radius: 6px;
+            padding: 9px 18px;
+            font-size: 13px;
+            font-weight: 600;
+            cursor: pointer;
+        }
+
+        .btn-modal-cancel:hover {
+            background-color: #cbd5e1;
+        }
+
+        .btn-modal-upload {
+            background-color: #1a73e8;
+            color: #ffffff;
+            border: none;
+            border-radius: 6px;
+            padding: 9px 20px;
+            font-size: 13px;
+            font-weight: 600;
+            cursor: pointer;
+            box-shadow: 0 2px 5px rgba(26, 115, 232, 0.3);
+        }
+
+        .btn-modal-upload:hover {
+            background-color: #1557b0;
+        }
+
+        @media (max-width: 850px) {
+            #loginPage {
+                flex-direction: column;
+                overflow-y: auto;
+            }
+            .left-section, .right-section {
+                flex: none;
+                width: 100%;
+            }
+            .right-section {
+                padding: 30px 20px;
+            }
+            .charts-grid {
+                grid-template-columns: 1fr;
+            }
+            .admin-layout {
+                flex-direction: column;
+            }
+            .admin-sidebar {
+                width: 100%;
+                height: auto;
+            }
+        }
+    </style>
+</head>
+<body>
+
+    <!-- HALAMAN 1: PENCARIAN KENDARAAN (HOME) -->
+    <div id="searchPage">
+        <header class="navbar">
+            <div class="navbar-left">
+                <img src="img/logo.png" alt="Logo Kebumen" class="logo-img">
+                <span class="title-text">PEMERINTAH KABUPATEN KEBUMEN</span>
+            </div>
+            <div class="user-icon" id="toLoginBtn" title="Ke Halaman Login">
+                <svg viewBox="0 0 24 24">
+                    <circle cx="12" cy="12" r="9"></circle>
+                    <circle cx="12" cy="9" r="3"></circle>
+                    <path d="M7.5 18c.8-2.4 2.4-3.6 4.5-3.6s3.7 1.2 4.5 3.6"></path>
+                </svg>
+            </div>
+        </header>
+
+        <main>
+            <section class="hero">
+                <div class="hero-content">
+                    <h1>Welcome to GARASI</h1>
+                    <h2>Gerbang Administrasi Kendaraan Dinas</h2>
+                    <p>
+                        Sistem Management Informasi Kendaraan Dinas milik Pemerintah Kabupaten Kebumen<br>
+                        untuk mempermudah pencarian data dan lokasi kendaraan
+                    </p>
+
+                    <div class="search-container">
+                        <div class="search-icon">
+                            <svg viewBox="0 0 24 24">
+                                <circle cx="11" cy="11" r="7"></circle>
+                                <line x1="16.5" y1="16.5" x2="21" y2="21"></line>
+                            </svg>
+                        </div>
+                        <input type="text" id="searchInput" placeholder="Masukan Kata Kunci">
+                        <button class="search-btn" id="searchBtn">
+                            <svg viewBox="0 0 24 24">
+                                <circle cx="10.5" cy="10.5" r="6"></circle>
+                                <line x1="15.5" y1="15.5" x2="20" y2="20"></line>
+                            </svg>
+                            <span>Cari</span>
+                        </button>
+                    </div>
+                </div>
+            </section>
+
+            <section class="bottom-section" id="defaultBottom">
+                <p class="bottom-text">
+                    Gunakan pencarian diatas untuk menemukan informasi kendaraan dinas<br>
+                    secara cepat, akurat dan mudah
+                </p>
+            </section>
+
+            <section class="result-section" id="resultSection">
+                <div class="result-header-row">
+                    <div class="result-icon-badge">
+                        <svg viewBox="0 0 24 24">
+                            <rect x="1" y="3" width="15" height="13" rx="2"></rect>
+                            <path d="M16 8h4l3 3v5h-7V8z"></path>
+                            <circle cx="5.5" cy="18.5" r="2.5"></circle>
+                            <circle cx="18.5" cy="18.5" r="2.5"></circle>
+                        </svg>
+                    </div>
+                    <div class="result-title-text">Hasil Pencarian</div>
+                </div>
+
+                <div class="alert-box" id="alertBox">
+                    <div class="alert-icon">!</div>
+                    <div class="alert-content">
+                        <h4>No. yang Anda masukkan bukan kendaraan dinas</h4>
+                        <p>Pastikan Anda memasukkan nomor polisi kendaraan dinas yang terdaftar pada sistem.</p>
+                    </div>
+                </div>
+
+                <div class="card-not-found" id="cardNotFound">
+                    <div class="not-found-icon-container">
+                        <svg viewBox="0 0 24 24">
+                            <path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"></path>
+                            <polyline points="14 2 14 8 20 8"></polyline>
+                            <line x1="9" y1="15" x2="15" y2="15"></line>
+                        </svg>
+                        <span class="cross-mark">✕</span>
+                    </div>
+                    <h3>Data tidak ditemukan</h3>
+                    <p>Nomor polisi yang Anda masukkan bukan merupakan kendaraan dinas Pemerintah Kabupaten Kebumen</p>
+                </div>
+
+                <div class="card-detail" id="cardDetail">
+                    <h3>Detail Kendaraan</h3>
+                    <table class="detail-table">
+                        <tr>
+                            <td class="label">Nomor</td>
+                            <td class="value" style="font-weight: 700;">25</td>
+                        </tr>
+                        <tr>
+                            <td class="label">Nomor Polisi</td>
+                            <td class="value" id="resNopol">AA 9673 JD</td>
+                        </tr>
+                        <tr>
+                            <td class="label">Merk / Tipe</td>
+                            <td class="value">Honda</td>
+                        </tr>
+                        <tr>
+                            <td class="label">OPD</td>
+                            <td class="value">DLHKP</td>
+                        </tr>
+                        <tr>
+                            <td class="label">Status</td>
+                            <td class="value"><span class="status-badge">Aktif</span></td>
+                        </tr>
+                    </table>
+                </div>
+            </section>
+        </main>
+    </div>
+
+    <!-- HALAMAN 2: FORM LOGIN -->
+    <div id="loginPage">
+        <div class="left-section">
+            <div class="left-content">
+                <div class="header-logo">
+                    <img src="img/logo.png" alt="Logo Kebumen">
+                    <span>PEMERINTAH KABUPATEN KEBUMEN</span>
+                </div>
+
+                <div class="welcome-title">SELAMAT DATANG DI</div>
+                <div class="app-title">GARASI</div>
+                <div class="app-subtitle">(GERBANG ADMINISTRASI KENDARAAN DINAS)</div>
+                
+                <div class="badge-kabupaten">KABUPATEN KEBUMEN</div>
+
+                <p class="desc-text">
+                    Platform Terintegrasi Untuk Mendukung Pengelolaan dan Pemantauan Kendaraan Dinas di Lingkungan Pemerintah Kabupaten Kebumen
+                </p>
+            </div>
+
+            <div class="vehicles-img-container">
+                <img src="img/kendaraan.jpg" alt="Kendaraan Dinas Kebumen">
+            </div>
+        </div>
+
+        <div class="right-section">
+            <div class="top-search" id="toSearchBtn" title="Kembali ke Pencarian Publik">
+                <svg viewBox="0 0 24 24">
+                    <circle cx="11" cy="11" r="7"></circle>
+                    <line x1="16.5" y1="16.5" x2="21" y2="21"></line>
+                </svg>
+                <input type="text" placeholder="Pencarian Publik (Klik untuk kembali)" readonly>
+            </div>
+
+            <div class="login-header">
+                <h2>WELCOME,</h2>
+                <h3>Rekan Kerja OPD Kebumen !</h3>
+                <p>Silahkan login untuk mengakses sistem informasi pelacakan kendaraan kinerja OPD Kabupaten Kebumen.</p>
+            </div>
+
+            <form id="loginForm">
+                <div class="form-group">
+                    <div class="form-label">
+                        <svg viewBox="0 0 24 24">
+                            <circle cx="12" cy="8" r="4"></circle>
+                            <path d="M6 20c0-4 4-5 6-5s6 1 6 5"></path>
+                        </svg>
+                        <span>Username</span>
+                    </div>
+                    <div class="input-box">
+                        <svg class="input-icon-left" viewBox="0 0 24 24">
+                            <circle cx="12" cy="8" r="4"></circle>
+                            <path d="M6 20c0-4 4-5 6-5s6 1 6 5"></path>
+                        </svg>
+                        <input type="text" id="userInput" placeholder="Masukkan Username Anda" required>
+                    </div>
+                </div>
+
+                <div class="form-group">
+                    <div class="input-box">
+                        <svg class="input-icon-left" viewBox="0 0 24 24" style="stroke: #000; fill: #000;">
+                            <rect x="5" y="11" width="14" height="10" rx="2"></rect>
+                            <path d="M8 11V7a4 4 0 0 1 8 0v4"></path>
+                        </svg>
+                        <input type="password" id="passInput" placeholder="Masukkan Password Anda" required>
+                        <svg class="input-icon-right" id="togglePass" viewBox="0 0 24 24">
+                            <path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"></path>
+                            <circle cx="12" cy="12" r="3"></circle>
+                        </svg>
+                    </div>
+                </div>
+
+                <div class="forgot-pass">
+                    <a href="#">Lupa password?</a>
+                </div>
+
+                <button type="submit" class="btn-login">Login</button>
+            </form>
+        </div>
+    </div>
+
+    <!-- HALAMAN 3: DASHBOARD ADMIN -->
+    <div id="adminDashboardPage">
+        <div class="admin-layout">
+            <aside class="admin-sidebar">
+                <div class="sidebar-top">
+                    <div class="sidebar-brand">
+                        <img src="img/logo.png" alt="Logo Kebumen">
+                        <div class="sidebar-brand-text">
+                            PEMERINTAH KABUPATEN<br>KEBUMEN
+                        </div>
+                    </div>
+                    
+                    <div class="sidebar-subtitle-app">
+                        GERBANG ADMINISTRASI KENDARAAN DINAS
+                    </div>
+
+                    <ul class="sidebar-menu">
+                        <li data-target="section-dashboard" class="active">
+                            <a href="#">
+                                <svg viewBox="0 0 24 24"><rect x="3" y="3" width="7" height="7"></rect><rect x="14" y="3" width="7" height="7"></rect><rect x="14" y="14" width="7" height="7"></rect><rect x="3" y="14" width="7" height="7"></rect></svg>
+                                <span>DASHBOARD</span>
+                            </a>
+                        </li>
+                        <li class="has-submenu">
+                            <a href="#" id="menuDataMaster">
+                                <svg viewBox="0 0 24 24"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"></path><polyline points="14 2 14 8 20 8"></polyline><line x1="16" y1="13" x2="8" y2="13"></line><line x1="16" y1="17" x2="8" y2="17"></line></svg>
+                                <span>DATA MASTER</span>
+                            </a>
+                            <ul class="submenu-list" id="submenuDataMaster">
+                                <li data-target="section-kendaraan"><a href="#">Data Kendaraan</a></li>
+                                <li data-target="section-opd"><a href="#">Data OPD</a></li>
+                                <li data-target="section-user"><a href="#">Data User</a></li>
+                                <li data-target="section-jenis"><a href="#">Jenis Kendaraan</a></li>
+                            </ul>
+                        </li>
+                        <li data-target="section-pengelolaan">
+                            <a href="#">
+                                <svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="3"></circle><path d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 0 1 0 2.83 2 2 0 0 1-2.83 0l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 0 1-2 2 2 2 0 0 1-2-2v-.09A1.65 1.65 0 0 0 9 19.4a1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 0 1-2.83 0 2 2 0 0 1 0-2.83l.06-.06a1.65 1.65 0 0 0 .33-1.82 1.65 1.65 0 0 0-1.51-1H3a2 2 0 0 1-2-2 2 2 0 0 1 2-2h.09A1.65 1.65 0 0 0 4.6 9a1.65 1.65 0 0 0-.33-1.82l-.06-.06a2 2 0 0 1 0-2.83 2 2 0 0 1 2.83 0l.06.06a1.65 1.65 0 0 0 1.82.33H9a1.65 1.65 0 0 0 1-1.51V3a2 2 0 0 1 2-2 2 2 0 0 1 2 2v.09a1.65 1.65 0 0 0 1 1.51 1.65 1.65 0 0 0 1.82-.33l.06-.06a2 2 0 0 1 2.83 0 2 2 0 0 1 0 2.83l-.06-.06a1.65 1.65 0 0 0-.33 1.82V9a1.65 1.65 0 0 0 1.51 1H21a2 2 0 0 1 2 2 2 2 0 0 1-2 2h-.09a1.65 1.65 0 0 0-1.51 1z"></path></svg>
+                                <span>PENGELOLAAN</span>
+                            </a>
+                        </li>
+                        <li data-target="section-laporan">
+                            <a href="#">
+                                <svg viewBox="0 0 24 24"><path d="M4 19.5v-15A2.5 2.5 0 0 1 6.5 2H20v20H6.5a2.5 2.5 0 0 1-2.5-2.5Z"></path><path d="M6 6h10"></path><path d="M6 10h10"></path></svg>
+                                <span>LAPORAN</span>
+                            </a>
+                        </li>
+                        <li data-target="section-sistem">
+                            <a href="#">
+                                <svg viewBox="0 0 24 24"><path d="M12 2v20M17 5H9.5a3.5 3.5 0 0 0 0 7h5a3.5 3.5 0 0 1 0 7H6"></path></svg>
+                                <span>SISTEM</span>
+                            </a>
+                        </li>
+                    </ul>
+                </div>
+
+                <div class="sidebar-bg-art">
+                    <img src="img/tugu lawet.png" alt="tugu lawet.png">
+                </div>
+
+                <div class="sidebar-logout-container">
+                    <button class="btn-logout" id="logoutBtn">Logout</button>
+                </div>
+            </aside>
+
+            <main class="admin-main-content">
+                <header class="admin-topbar">
+                    <div class="topbar-left">
+                        <div class="hamburger-icon">
+                            <span></span>
+                            <span></span>
+                            <span></span>
+                        </div>
+                    </div>
+                    <div class="topbar-right">
+                        <div class="admin-profile-text">
+                            <div class="admin-name">Admin BPKDP</div>
+                            <div class="admin-dept">Kebumen</div>
+                        </div>
+                        <div class="admin-avatar">
+                            <svg viewBox="0 0 24 24"><path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"></path><circle cx="12" cy="7" r="4"></circle></svg>
+                        </div>
+                    </div>
+                </header>
+
+                <div class="dashboard-body">
+                    <!-- 1. DASHBOARD ANALITIK (TAMPILAN AWAL SETELAH LOGIN) -->
+                    <div class="content-section active" id="section-dashboard">
+                        <div class="dashboard-title-area">
+                            <h1>Dashboard Analitik</h1>
+                            <p>Gambaran Umum Aset Kendaraan Dinas Pemerintah Kabupaten Kebumen</p>
+                        </div>
+
+                        <div class="stat-card-box">
+                            <div class="stat-card-title">TOTAL KENDARAAN</div>
+                            <div class="stat-card-content">
+                                <div class="stat-number">3.112</div>
+                                <div class="stat-icon">
+                                    <svg viewBox="0 0 24 24"><rect x="1" y="3" width="15" height="13" rx="2"></rect><path d="M16 8h4l3 3v5h-7V8z"></path><circle cx="5.5" cy="18.5" r="2.5"></circle><circle cx="18.5" cy="18.5" r="2.5"></circle></svg>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="charts-grid">
+                            <div class="chart-card">
+                                <h3>Kendaraan Dinas Per Jenis Kendaraan</h3>
+                                <p>Roda dua, roda tiga, roda empat, kendaraan berat dan tidak diketahui</p>
+                                <div class="pie-placeholder">
+                                    <div class="fake-pie-1"></div>
+                                </div>
+                                <div class="chart-legends">
+                                    <div class="legend-item"><span class="legend-dot" style="background:#5c6bc0;"></span> Roda Dua</div>
+                                    <div class="legend-item"><span class="legend-dot" style="background:#26a69a;"></span> Roda Tiga</div>
+                                    <div class="legend-item"><span class="legend-dot" style="background:#ef5350;"></span> Roda Empat</div>
+                                </div>
+                            </div>
+
+                            <div class="chart-card">
+                                <h3>Kendaraan Dinas Per Peruntukan</h3>
+                                <p>Jabatan, Operasional, Operasional Khusus, Panjang Pakai, Perorangan</p>
+                                <div class="pie-placeholder">
+                                    <div class="fake-pie-2"></div>
+                                </div>
+                                <div class="chart-legends">
+                                    <div class="legend-item"><span class="legend-dot" style="background:#5c6bc0;"></span> Roda Dua</div>
+                                    <div class="legend-item"><span class="legend-dot" style="background:#26a69a;"></span> Roda Tiga</div>
+                                    <div class="legend-item"><span class="legend-dot" style="background:#ef5350;"></span> Roda Empat Atau Lebih</div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- 2. DATA KENDARAAN -->
+                    <div class="content-section" id="section-kendaraan">
+                        <div class="data-card">
+                            <div class="data-card-header">
+                                <div class="data-card-title">Data Kendaraan Dinas Kabupaten Kebumen</div>
+                                <div class="data-card-actions">
+                                    <input type="text" class="table-search-input" placeholder="Cari Plat, Merk, atau OPD...">
+                                    <button class="btn-input-baru" id="openImportModalBtn">
+                                        <span>+ Input Baru</span>
+                                    </button>
+                                </div>
+                            </div>
+
+                            <table class="custom-table" id="kendaraanTable">
+                                <thead>
+                                    <tr>
+                                        <th>No</th>
+                                        <th>Nomor Polisi</th>
+                                        <th>Merk / Tipe</th>
+                                        <th>OPD</th>
+                                        <th>Status</th>
+                                        <th>Aksi</th>
+                                    </tr>
+                                </thead>
+                                <tbody id="kendaraanTableBody">
+                                    <tr>
+                                        <td>1</td>
+                                        <td>AA 9673 JD</td>
+                                        <td>Honda / Supra X</td>
+                                        <td>DLHKP</td>
+                                        <td><span class="status-badge">Aktif</span></td>
+                                        <td>
+                                            <div class="table-actions">
+                                                <svg viewBox="0 0 24 24" title="Edit"><path d="M11 4H4a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2v-7"></path><path d="M18.5 2.5a2.121 2.121 0 0 1 3 3L12 15l-4 1 1-4 9.5-9.5z"></path></svg>
+                                                <svg viewBox="0 0 24 24" title="Hapus" onclick="deleteRow(this)"><polyline points="3 6 5 6 21 6"></polyline><path d="M19 6v14a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V6m3 0V4a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2"></path></svg>
+                                            </div>
+                                        </td>
+                                    </tr>
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+
+                    <!-- 3. DATA OPD -->
+                    <div class="content-section" id="section-opd">
+                        <div class="data-card" id="opdTableCard">
+                            <div class="data-card-header">
+                                <div class="data-card-title">Data OPD</div>
+                                <div class="data-card-actions">
+                                    <input type="text" class="table-search-input" placeholder="Cari Nama OPD...">
+                                    <button class="btn-input-baru" id="openAddOpdForm"><span>+ Input Baru</span></button>
+                                </div>
+                            </div>
+                            <table class="custom-table">
+                                <thead>
+                                    <tr>
+                                        <th>Nomor</th>
+                                        <th>Nama OPD</th>
+                                        <th>Aksi</th>
+                                    </tr>
+                                </thead>
+                                <tbody id="opdTableBody">
+                                    <tr>
+                                        <td>1</td>
+                                        <td>DLHKP</td>
+                                        <td>
+                                            <div class="table-actions">
+                                                <svg viewBox="0 0 24 24"><path d="M11 4H4a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2v-7"></path><path d="M18.5 2.5a2.121 2.121 0 0 1 3 3L12 15l-4 1 1-4 9.5-9.5z"></path></svg>
+                                                <svg viewBox="0 0 24 24" onclick="deleteOpdRow(this)"><polyline points="3 6 5 6 21 6"></polyline><path d="M19 6v14a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V6m3 0V4a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2"></path></svg>
+                                            </div>
+                                        </td>
+                                    </tr>
+                                </tbody>
+                            </table>
+                        </div>
+
+                        <div class="data-card" id="opdFormCard" style="display: none;">
+                            <div class="data-card-header">
+                                <div class="data-card-title">Tambah Data OPD</div>
+                            </div>
+                            <div style="display: flex; flex-direction: column; gap: 16px; margin-top: 10px;">
+                                <div>
+                                    <label style="display: block; font-size: 13px; font-weight: 700; color: #333; margin-bottom: 6px;">Nama OPD</label>
+                                    <input type="text" id="inputNamaOpd" class="table-search-input" style="width: 100%; max-width: 100%; padding: 10px;" placeholder="Masukkan Nama OPD">
+                                </div>
+                                <div style="display: flex; gap: 10px; margin-top: 10px;">
+                                    <button class="btn-login" id="saveOpdBtn" style="background-color: #1a73e8; width: 120px; padding: 10px 20px; border-radius: 6px; font-size: 13px;">Simpan</button>
+                                    <button class="btn-modal-cancel" id="cancelOpdBtn" style="background-color: #e02424; color: #fff; width: 100px; border-radius: 6px; font-size: 13px;">Batal</button>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- 4. DATA USER -->
+                    <div class="content-section" id="section-user">
+                        <div class="data-card" id="userTableCard">
+                            <div class="data-card-header">
+                                <div class="data-card-title">Data User</div>
+                                <div class="data-card-actions">
+                                    <input type="text" class="table-search-input" placeholder="Cari Nama, atau OPD...">
+                                    <button class="btn-input-baru" id="openAddUserForm">
+                                        <span>+ Input Baru</span>
+                                    </button>
+                                </div>
+                            </div>
+                            <table class="custom-table">
+                                <thead>
+                                    <tr>
+                                        <th>Nomor</th>
+                                        <th>Nama</th>
+                                        <th>Nama OPD</th>
+                                        <th>Aksi</th>
+                                    </tr>
+                                </thead>
+                                <tbody id="userTableBody">
+                                    <tr>
+                                        <td>1</td>
+                                        <td>Admin BPKDP</td>
+                                        <td>BPKDP</td>
+                                        <td>
+                                            <div class="table-actions">
+                                                <svg viewBox="0 0 24 24" title="Edit"><path d="M11 4H4a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2v-7"></path><path d="M18.5 2.5a2.121 2.121 0 0 1 3 3L12 15l-4 1 1-4 9.5-9.5z"></path></svg>
+                                                <svg viewBox="0 0 24 24" title="Hapus" onclick="deleteUserRow(this)"><polyline points="3 6 5 6 21 6"></polyline><path d="M19 6v14a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V6m3 0V4a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2"></path></svg>
+                                            </div>
+                                        </td>
+                                    </tr>
+                                </tbody>
+                            </table>
+                        </div>
+
+                        <div class="data-card" id="userFormCard" style="display: none;">
+                            <div class="data-card-header">
+                                <div class="data-card-title">Tambah Data User</div>
+                            </div>
+                            <div style="display: flex; flex-direction: column; gap: 16px; margin-top: 10px;">
+                                <div>
+                                    <label style="display: block; font-size: 13px; font-weight: 700; color: #333; margin-bottom: 6px;">Nama</label>
+                                    <input type="text" id="inputUserName" class="table-search-input" style="width: 100%; max-width: 100%; padding: 10px;" placeholder="Masukkan Nama User">
+                                </div>
+                                <div>
+                                    <label style="display: block; font-size: 13px; font-weight: 700; color: #333; margin-bottom: 6px;">Nama OPD</label>
+                                    <input type="text" id="inputUserOpd" class="table-search-input" style="width: 100%; max-width: 100%; padding: 10px;" placeholder="Masukkan Nama OPD">
+                                </div>
+                                <div>
+                                    <label style="display: block; font-size: 13px; font-weight: 700; color: #333; margin-bottom: 6px;">Password</label>
+                                    <input type="password" id="inputUserPass" class="table-search-input" style="width: 100%; max-width: 100%; padding: 10px;" placeholder="Masukkan Password">
+                                </div>
+                                <div style="display: flex; gap: 10px; margin-top: 10px;">
+                                    <button class="btn-login" id="saveUserBtn" style="background-color: #1a73e8; width: 120px; padding: 10px 20px; border-radius: 6px; font-size: 13px;">Simpan</button>
+                                    <button class="btn-modal-cancel" id="cancelUserBtn" style="background-color: #e02424; color: #fff; width: 100px; border-radius: 6px; font-size: 13px;">Batal</button>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- 5. JENIS KENDARAAN -->
+                    <div class="content-section" id="section-jenis">
+                        <div class="data-card" id="jenisTableCard">
+                            <div class="data-card-header">
+                                <div class="data-card-title">Jenis Kendaraan</div>
+                                <div class="data-card-actions">
+                                    <input type="text" class="table-search-input" placeholder="Cari Jenis atau Keterangan...">
+                                    <button class="btn-input-baru" id="openAddJenisForm">
+                                        <span>+ Input Baru</span>
+                                    </button>
+                                </div>
+                            </div>
+                            <table class="custom-table">
+                                <thead>
+                                    <tr>
+                                        <th>Nomor</th>
+                                        <th>Jenis</th>
+                                        <th>Keterangan</th>
+                                        <th>Aksi</th>
+                                    </tr>
+                                </thead>
+                                <tbody id="jenisTableBody">
+                                    <tr>
+                                        <td>1</td>
+                                        <td>Roda Empat</td>
+                                        <td>Kendaraan Operasional / Jabatan</td>
+                                        <td>
+                                            <div class="table-actions">
+                                                <svg viewBox="0 0 24 24" title="Edit"><path d="M11 4H4a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2v-7"></path><path d="M18.5 2.5a2.121 2.121 0 0 1 3 3L12 15l-4 1 1-4 9.5-9.5z"></path></svg>
+                                                <svg viewBox="0 0 24 24" title="Hapus" onclick="deleteJenisRow(this)"><polyline points="3 6 5 6 21 6"></polyline><path d="M19 6v14a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V6m3 0V4a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2"></path></svg>
+                                            </div>
+                                        </td>
+                                    </tr>
+                                </tbody>
+                            </table>
+                        </div>
+
+                        <div class="data-card" id="jenisFormCard" style="display: none;">
+                            <div class="data-card-header">
+                                <div class="data-card-title">Tambah Jenis Kendaraan</div>
+                            </div>
+                            <div style="display: flex; flex-direction: column; gap: 16px; margin-top: 10px;">
+                                <div>
+                                    <label style="display: block; font-size: 13px; font-weight: 700; color: #333; margin-bottom: 6px;">Nama Jenis Kendaraan</label>
+                                    <input type="text" id="inputNamaJenis" class="table-search-input" style="width: 100%; max-width: 100%; padding: 10px;" placeholder="Masukkan Nama Jenis Kendaraan">
+                                </div>
+                                <div>
+                                    <label style="display: block; font-size: 13px; font-weight: 700; color: #333; margin-bottom: 6px;">Keterangan</label>
+                                    <input type="text" id="inputKeteranganJenis" class="table-search-input" style="width: 100%; max-width: 100%; padding: 10px;" placeholder="Masukkan Keterangan">
+                                </div>
+                                <div style="display: flex; gap: 10px; margin-top: 10px;">
+                                    <button class="btn-login" id="saveJenisBtn" style="background-color: #1a73e8; width: 120px; padding: 10px 20px; border-radius: 6px; font-size: 13px;">Simpan</button>
+                                    <button class="btn-modal-cancel" id="cancelJenisBtn" style="background-color: #e02424; color: #fff; width: 100px; border-radius: 6px; font-size: 13px;">Batal</button>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- 6. PENGELOLAAN -->
+                    <div class="content-section" id="section-pengelolaan">
+                        <div class="data-card">
+                            <div class="data-card-header">
+                                <div class="data-card-title">Pengelolaan Kendaraan & Aset</div>
+                            </div>
+                            <p style="font-size: 13.5px; color: #555; line-height: 1.5;">
+                                Menu ini digunakan untuk mengelola mutasi, status penugasan, pemeliharaan, serta pencatatan peminjaman kendaraan dinas antar OPD di lingkungan Kabupaten Kebumen.
+                            </p>
+                        </div>
+                    </div>
+
+                    <!-- 7. LAPORAN -->
+                    <div class="content-section" id="section-laporan">
+                        <div class="data-card">
+                            <div class="data-card-header">
+                                <div class="data-card-title">Laporan Rekapitulasi Kendaraan Dinas</div>
+                            </div>
+                            <p style="font-size: 13.5px; color: #555; line-height: 1.5;">
+                                Fitur untuk menghasilkan rekap data aset kendaraan dinas secara berkala per OPD maupun keseluruhan.
+                            </p>
+                        </div>
+                    </div>
+
+                    <!-- 8. SISTEM -->
+                    <div class="content-section" id="section-sistem">
+                        <div class="data-card">
+                            <div class="data-card-header">
+                                <div class="data-card-title">Pengaturan Sistem & Konfigurasi</div>
+                            </div>
+                            <p style="font-size: 13.5px; color: #555; line-height: 1.5;">
+                                Halaman konfigurasi hak akses, manajemen keamanan aplikasi, pemeliharaan basis data, dan backup sistem GARASI.
+                            </p>
+                        </div>
+                    </div>
+                </div>
+            </main>
+        </div>
+    </div>
+
+    <!-- MODAL POPUP: IMPORT & SIMPAN DATA KENDARAAN BARU -->
+    <div class="modal-overlay" id="importModal">
+        <div class="modal-container">
+            <div class="modal-header">
+                <h3>Input / Import Data Kendaraan Dinas Baru</h3>
+                <button class="modal-close" id="closeModalBtn">&times;</button>
+            </div>
+            <div class="modal-body">
+                <p>Pilih file Excel BPKDP atau masukkan data kendaraan dinas baru di bawah ini agar langsung tersimpan ke tabel.</p>
+                
+                <div class="file-drop-area" id="fileDropArea">
+                    <svg viewBox="0 0 24 24">
+                        <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"></path>
+                        <polyline points="17 8 12 3 7 8"></polyline>
+                        <line x1="12" y1="3" x2="12" y2="15"></line>
+                    </svg>
+                    <div class="file-label-text" id="fileLabelText">Klik atau seret file Excel ke sini</div>
+                    <div class="file-sub-text">Maksimal ukuran file 10 MB (.xlsx, .xls)</div>
+                    <input type="file" id="excelFileInput" class="file-input-hidden" accept=".xlsx, .xls">
+                </div>
+
+                <div style="display: flex; flex-direction: column; gap: 10px; margin-top: 10px;">
+                    <input type="text" id="inputNopol" class="table-search-input" style="width: 100%; max-width: 100%; padding: 10px;" placeholder="Nomor Polisi (Contoh: AA 5555 XX)">
+                    <input type="text" id="inputMerk" class="table-search-input" style="width: 100%; max-width: 100%; padding: 10px;" placeholder="Merk / Tipe (Contoh: Isuzu / D-Max)">
+                    <input type="text" id="inputOpd" class="table-search-input" style="width: 100%; max-width: 100%; padding: 10px;" placeholder="Nama OPD (Contoh: Dinas PUPR)">
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button class="btn-modal-cancel" id="cancelModalBtn">Batal</button>
+                <button class="btn-modal-upload" id="submitUploadBtn">Unggah & Simpan</button>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        const searchPage = document.getElementById('searchPage');
+        const loginPage = document.getElementById('loginPage');
+        const adminDashboardPage = document.getElementById('adminDashboardPage');
+        
+        const toLoginBtn = document.getElementById('toLoginBtn');
+        const toSearchBtn = document.getElementById('toSearchBtn');
+        const logoutBtn = document.getElementById('logoutBtn');
+
+        toLoginBtn.addEventListener('click', function() {
+            searchPage.style.display = 'none';
+            adminDashboardPage.style.display = 'none';
+            loginPage.style.display = 'flex';
+        });
+
+        toSearchBtn.addEventListener('click', function() {
+            loginPage.style.display = 'none';
+            adminDashboardPage.style.display = 'none';
+            searchPage.style.display = 'flex';
+        });
+
+        logoutBtn.addEventListener('click', function() {
+            adminDashboardPage.style.display = 'none';
+            loginPage.style.display = 'none';
+            searchPage.style.display = 'flex';
+        });
+
+        const searchInput = document.getElementById('searchInput');
+        const searchBtn = document.getElementById('searchBtn');
+        const defaultBottom = document.getElementById('defaultBottom');
+        const resultSection = document.getElementById('resultSection');
+        const alertBox = document.getElementById('alertBox');
+        const cardNotFound = document.getElementById('cardNotFound');
+        const cardDetail = document.getElementById('cardDetail');
+        const resNopol = document.getElementById('resNopol');
+
+        function doSearch() {
+            const query = searchInput.value.trim().toUpperCase();
+            
+            if (query !== "") {
+                defaultBottom.style.display = 'none';
+                resultSection.style.display = 'block';
+
+                if (query === "AA 9673 JD") {
+                    alertBox.style.display = 'none';
+                    cardNotFound.style.display = 'none';
+                    cardDetail.style.display = 'block';
+                    resNopol.innerText = query;
+                } else {
+                    alertBox.style.display = 'flex';
+                    cardNotFound.style.display = 'block';
+                    cardDetail.style.display = 'none';
+                }
+            } else {
+                defaultBottom.style.display = 'flex';
+                resultSection.style.display = 'none';
+            }
+        }
+
+        searchBtn.addEventListener('click', doSearch);
+        searchInput.addEventListener('keypress', function (e) {
+            if (e.key === 'Enter') {
+                doSearch();
+            }
+        });
+
+        const togglePass = document.getElementById('togglePass');
+        const passInput = document.getElementById('passInput');
+
+        togglePass.addEventListener('click', function () {
+            const type = passInput.getAttribute('type') === 'password' ? 'text' : 'password';
+            passInput.setAttribute('type', type);
+        });
+
+        const loginForm = document.getElementById('loginForm');
+        const userInput = document.getElementById('userInput');
+
+        loginForm.addEventListener('submit', function(e) {
+            e.preventDefault();
+            const enteredUser = userInput.value.trim();
+            const enteredPass = passInput.value;
+
+            if (enteredUser === 'admin' && enteredPass === 'admin1234567') {
+                loginPage.style.display = 'none';
+                searchPage.style.display = 'none';
+                adminDashboardPage.style.display = 'block';
+            } else {
+                alert('Username atau Password salah! Gunakan username "admin" dan password "admin1234567".');
+            }
+        });
+
+        // Sidebar Navigation & Submenu Toggle
+        const menuDataMaster = document.getElementById('menuDataMaster');
+        const submenuDataMaster = document.getElementById('submenuDataMaster');
+
+        menuDataMaster.addEventListener('click', function(e) {
+            e.preventDefault();
+            const currentDisplay = submenuDataMaster.style.display;
+            submenuDataMaster.style.display = (currentDisplay === 'flex') ? 'none' : 'flex';
+        });
+
+        const navItems = document.querySelectorAll('.sidebar-menu li[data-target], .submenu-list li[data-target]');
+        const contentSections = document.querySelectorAll('.content-section');
+
+        navItems.forEach(item => {
+            item.addEventListener('click', function(e) {
+                e.preventDefault();
+                const targetId = this.getAttribute('data-target');
+                
+                document.querySelectorAll('.sidebar-menu li, .submenu-list li').forEach(el => {
+                    el.classList.remove('active');
+                });
+
+                this.classList.add('active');
+                if(this.parentElement.classList.contains('submenu-list')) {
+                    menuDataMaster.parentElement.classList.add('active');
+                }
+
+                contentSections.forEach(sec => {
+                    sec.classList.remove('active');
+                    if(sec.id === targetId) {
+                        sec.classList.add('active');
+                    }
+                });
+            });
+        });
+
+        // 1. Toggle Form Tambah Data OPD
+        const openAddOpdForm = document.getElementById('openAddOpdForm');
+        const opdTableCard = document.getElementById('opdTableCard');
+        const opdFormCard = document.getElementById('opdFormCard');
+        const cancelOpdBtn = document.getElementById('cancelOpdBtn');
+        const saveOpdBtn = document.getElementById('saveOpdBtn');
+        const inputNamaOpd = document.getElementById('inputNamaOpd');
+        const opdTableBody = document.querySelector('#section-opd tbody');
+
+        if(openAddOpdForm) {
+            openAddOpdForm.addEventListener('click', function() {
+                opdTableCard.style.display = 'none';
+                opdFormCard.style.display = 'block';
+            });
+            cancelOpdBtn.addEventListener('click', function() {
+                opdFormCard.style.display = 'none';
+                opdTableCard.style.display = 'block';
+                inputNamaOpd.value = '';
+            });
+            saveOpdBtn.addEventListener('click', function() {
+                const namaOpd = inputNamaOpd.value.trim();
+                if(namaOpd) {
+                    const rowCount = opdTableBody.rows.length + 1;
+                    const newRow = document.createElement('tr');
+                    newRow.innerHTML = `
+                        <td>${rowCount}</td>
+                        <td>${namaOpd}</td>
+                        <td>
+                            <div class="table-actions">
+                                <svg viewBox="0 0 24 24"><path d="M11 4H4a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2v-7"></path><path d="M18.5 2.5a2.121 2.121 0 0 1 3 3L12 15l-4 1 1-4 9.5-9.5z"></path></svg>
+                                <svg viewBox="0 0 24 24" onclick="deleteOpdRow(this)"><polyline points="3 6 5 6 21 6"></polyline><path d="M19 6v14a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V6m3 0V4a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2"></path></svg>
+                            </div>
+                        </td>
+                    `;
+                    opdTableBody.appendChild(newRow);
+                    alert('Data OPD berhasil disimpan!');
+                    inputNamaOpd.value = '';
+                    opdFormCard.style.display = 'none';
+                    opdTableCard.style.display = 'block';
+                } else {
+                    alert('Mohon masukkan Nama OPD!');
+                }
+            });
+        }
+
+        function deleteOpdRow(element) {
+            const row = element.closest('tr');
+            row.remove();
+            const rows = opdTableBody.rows;
+            for (let i = 0; i < rows.length; i++) {
+                rows[i].cells[0].innerText = i + 1;
+            }
+        }
+
+        // 2. Toggle Form Tambah Data User
+        const openAddUserForm = document.getElementById('openAddUserForm');
+        const userTableCard = document.getElementById('userTableCard');
+        const userFormCard = document.getElementById('userFormCard');
+        const cancelUserBtn = document.getElementById('cancelUserBtn');
+        const saveUserBtn = document.getElementById('saveUserBtn');
+        const inputUserName = document.getElementById('inputUserName');
+        const inputUserOpd = document.getElementById('inputUserOpd');
+        const inputUserPass = document.getElementById('inputUserPass');
+        const userTableBody = document.getElementById('userTableBody');
+
+        if(openAddUserForm) {
+            openAddUserForm.addEventListener('click', function() {
+                userTableCard.style.display = 'none';
+                userFormCard.style.display = 'block';
+            });
+            cancelUserBtn.addEventListener('click', function() {
+                userFormCard.style.display = 'none';
+                userTableCard.style.display = 'block';
+                inputUserName.value = '';
+                inputUserOpd.value = '';
+                inputUserPass.value = '';
+            });
+            saveUserBtn.addEventListener('click', function() {
+                const name = inputUserName.value.trim();
+                const opd = inputUserOpd.value.trim();
+                const pass = inputUserPass.value.trim();
+
+                if(name && opd && pass) {
+                    const rowCount = userTableBody.rows.length + 1;
+                    const newRow = document.createElement('tr');
+                    newRow.innerHTML = `
+                        <td>${rowCount}</td>
+                        <td>${name}</td>
+                        <td>${opd}</td>
+                        <td>
+                            <div class="table-actions">
+                                <svg viewBox="0 0 24 24" title="Edit"><path d="M11 4H4a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2v-7"></path><path d="M18.5 2.5a2.121 2.121 0 0 1 3 3L12 15l-4 1 1-4 9.5-9.5z"></path></svg>
+                                <svg viewBox="0 0 24 24" title="Hapus" onclick="deleteUserRow(this)"><polyline points="3 6 5 6 21 6"></polyline><path d="M19 6v14a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V6m3 0V4a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2"></path></svg>
+                            </div>
+                        </td>
+                    `;
+                    userTableBody.appendChild(newRow);
+                    alert('Data user berhasil disimpan!');
+                    inputUserName.value = '';
+                    inputUserOpd.value = '';
+                    inputUserPass.value = '';
+                    userFormCard.style.display = 'none';
+                    userTableCard.style.display = 'block';
+                } else {
+                    alert('Mohon lengkapi semua kolom form (Nama, Nama OPD, dan Password)!');
+                }
+            });
+        }
+
+        function deleteUserRow(element) {
+            const row = element.closest('tr');
+            row.remove();
+            const rows = userTableBody.rows;
+            for (let i = 0; i < rows.length; i++) {
+                rows[i].cells[0].innerText = i + 1;
+            }
+        }
+
+        // 3. Toggle Form Tambah Jenis Kendaraan
+        const openAddJenisForm = document.getElementById('openAddJenisForm');
+        const jenisTableCard = document.getElementById('jenisTableCard');
+        const jenisFormCard = document.getElementById('jenisFormCard');
+        const cancelJenisBtn = document.getElementById('cancelJenisBtn');
+        const saveJenisBtn = document.getElementById('saveJenisBtn');
+        const inputNamaJenis = document.getElementById('inputNamaJenis');
+        const inputKeteranganJenis = document.getElementById('inputKeteranganJenis');
+        const jenisTableBody = document.getElementById('jenisTableBody');
+
+        if(openAddJenisForm) {
+            openAddJenisForm.addEventListener('click', function() {
+                jenisTableCard.style.display = 'none';
+                jenisFormCard.style.display = 'block';
+            });
+            cancelJenisBtn.addEventListener('click', function() {
+                jenisFormCard.style.display = 'none';
+                jenisTableCard.style.display = 'block';
+                inputNamaJenis.value = '';
+                inputKeteranganJenis.value = '';
+            });
+            saveJenisBtn.addEventListener('click', function() {
+                const namaJenis = inputNamaJenis.value.trim();
+                const ketJenis = inputKeteranganJenis.value.trim();
+
+                if(namaJenis && ketJenis) {
+                    const rowCount = jenisTableBody.rows.length + 1;
+                    const newRow = document.createElement('tr');
+                    newRow.innerHTML = `
+                        <td>${rowCount}</td>
+                        <td>${namaJenis}</td>
+                        <td>${ketJenis}</td>
+                        <td>
+                            <div class="table-actions">
+                                <svg viewBox="0 0 24 24" title="Edit"><path d="M11 4H4a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2v-7"></path><path d="M18.5 2.5a2.121 2.121 0 0 1 3 3L12 15l-4 1 1-4 9.5-9.5z"></path></svg>
+                                <svg viewBox="0 0 24 24" title="Hapus" onclick="deleteJenisRow(this)"><polyline points="3 6 5 6 21 6"></polyline><path d="M19 6v14a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V6m3 0V4a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2"></path></svg>
+                            </div>
+                        </td>
+                    `;
+                    jenisTableBody.appendChild(newRow);
+                    alert('Jenis kendaraan berhasil disimpan!');
+                    inputNamaJenis.value = '';
+                    inputKeteranganJenis.value = '';
+                    jenisFormCard.style.display = 'none';
+                    jenisTableCard.style.display = 'block';
+                } else {
+                    alert('Mohon lengkapi kolom Nama Jenis Kendaraan dan Keterangan!');
+                }
+            });
+        }
+
+        function deleteJenisRow(element) {
+            const row = element.closest('tr');
+            row.remove();
+            const rows = jenisTableBody.rows;
+            for (let i = 0; i < rows.length; i++) {
+                rows[i].cells[0].innerText = i + 1;
+            }
+        }
+
+        // Modal Excel Import & Save Data Kendaraan Baru
+        const openImportModalBtn = document.getElementById('openImportModalBtn');
+        const importModal = document.getElementById('importModal');
+        const closeModalBtn = document.getElementById('closeModalBtn');
+        const cancelModalBtn = document.getElementById('cancelModalBtn');
+        const fileDropArea = document.getElementById('fileDropArea');
+        const excelFileInput = document.getElementById('excelFileInput');
+        const fileLabelText = document.getElementById('fileLabelText');
+        const submitUploadBtn = document.getElementById('submitUploadBtn');
+        
+        const inputNopol = document.getElementById('inputNopol');
+        const inputMerk = document.getElementById('inputMerk');
+        const inputOpd = document.getElementById('inputOpd');
+        const kendaraanTableBody = document.getElementById('kendaraanTableBody');
+
+        if(openImportModalBtn) {
+            openImportModalBtn.addEventListener('click', function() {
+                importModal.style.display = 'flex';
+            });
+
+            function closeModal() {
+                importModal.style.display = 'none';
+                excelFileInput.value = '';
+                fileLabelText.textContent = 'Klik atau seret file Excel ke sini';
+                inputNopol.value = '';
+                inputMerk.value = '';
+                inputOpd.value = '';
+            }
+
+            closeModalBtn.addEventListener('click', closeModal);
+            cancelModalBtn.addEventListener('click', closeModal);
+
+            window.addEventListener('click', function(e) {
+                if (e.target === importModal) {
+                    closeModal();
+                }
+            });
+
+            fileDropArea.addEventListener('click', function() {
+                excelFileInput.click();
+            });
+
+            excelFileInput.addEventListener('change', function() {
+                if (excelFileInput.files.length > 0) {
+                    const fileName = excelFileInput.files[0].name;
+                    fileLabelText.textContent = 'File dipilih: ' + fileName;
+                    if(!inputNopol.value) inputNopol.value = "AA 8888 XX";
+                    if(!inputMerk.value) inputMerk.value = "Toyota / Hilux (Import)";
+                    if(!inputOpd.value) inputOpd.value = "BPKDP Kebumen";
+                }
+            });
+
+            submitUploadBtn.addEventListener('click', function() {
+                const nopol = inputNopol.value.trim();
+                const merk = inputMerk.value.trim();
+                const opd = inputOpd.value.trim();
+
+                if (nopol && merk && opd) {
+                    const rowCount = kendaraanTableBody.rows.length + 1;
+                    const newRow = document.createElement('tr');
+                    newRow.innerHTML = `
+                        <td>${rowCount}</td>
+                        <td>${nopol}</td>
+                        <td>${merk}</td>
+                        <td>${opd}</td>
+                        <td><span class="status-badge">Aktif</span></td>
+                        <td>
+                            <div class="table-actions">
+                                <svg viewBox="0 0 24 24" title="Edit"><path d="M11 4H4a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2v-7"></path><path d="M18.5 2.5a2.121 2.121 0 0 1 3 3L12 15l-4 1 1-4 9.5-9.5z"></path></svg>
+                                <svg viewBox="0 0 24 24" title="Hapus" onclick="deleteRow(this)"><polyline points="3 6 5 6 21 6"></polyline><path d="M19 6v14a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V6m3 0V4a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2"></path></svg>
+                            </div>
+                        </td>
+                    `;
+                    kendaraanTableBody.appendChild(newRow);
+                    alert('Data kendaraan dinas berhasil disimpan dan ditambahkan ke dalam Tabel!');
+                    closeModal();
+                } else {
+                    alert('Mohon lengkapi data nomor polisi, merk, dan OPD atau unggah file Excel terlebih dahulu!');
+                }
+            });
+        }
+
+        function deleteRow(element) {
+            const row = element.closest('tr');
+            row.remove();
+            const rows = kendaraanTableBody.rows;
+            for (let i = 0; i < rows.length; i++) {
+                rows[i].cells[0].innerText = i + 1;
+            }
+        }
+    </script>
+</body>
+</html>
